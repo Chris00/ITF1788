@@ -1,0 +1,293 @@
+#
+#                              ITF1788
+#
+#   Interval Test Framework for IEEE 1788 Standard for Interval Arithmetic
+#
+#
+#   Copyright 2014
+#
+#   Marco Nehmeier (nehmeier@informatik.uni-wuerzburg.de)
+#   Maximilian Kiesner (maximilian.kiesner@stud-mail.uni-wuerzburg.de)
+#
+#   Department of Computer Science
+#   University of Wuerzburg, Germany
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
+#
+# Imports required for the IEEE 1788 implementation
+#
+imports: ""
+
+#
+# Anything else that your code requires, e.g. definitions of constants
+# Example: "
+#           template<typename T>
+#           using flavor = p1788::flavor::infsup::mpfr_flavor<T, p1788::flavor::infsup::subnormalize::yes>;
+#           
+#           template<typename T>
+#           using I = p1788::infsup::interval<T, flavor>;
+#           
+#           const double INF = std::numeric_limits<double>::infinity();
+#          "
+preamble: |
+    use crate::util::*;
+    use hexf::*;
+    type I = inari::Interval;
+    type O = inari::OverlappingState;
+
+#
+# NaI constant for different data types.
+# Example: "I<double>::nai()" and "I<float>::nai()"
+#
+nai_interval_double: 
+nai_interval_float:
+nai_interval_long_double:
+
+#
+# Empty interval for different data types.
+#
+empty_interval_double: I::empty()
+#empty_interval_float:
+#empty_interval_long_double:
+
+#
+# Entire interval for different data types.
+#
+entire_interval_double: I::entire()
+#entire_interval_float:
+#entire_interval_long_double:
+
+#
+# Decorated empty interval for different data types.
+# Use the token ${DEC} where the translation of the decoration shall be
+# inserted.
+# Example: "I<double>::empty($DEC)" and "I<float>::empty($DEC)"
+#
+decorated_empty_interval_double: '"[Empty]_$DEC"'
+#decorated_empty_interval_float:
+#decorated_empty_interval_long_double:
+
+#
+# Decorated entire interval for different data types.
+# Use the token ${DEC} where the translation of the decoration shall be
+# inserted.
+#
+decorated_entire_interval_double: '"[Entire]_$DEC"'
+#decorated_entire_interval_float:
+#decorated_entire_interval_long_double:
+
+#
+# Infsup interval for different data types.
+# Use the tokens ${ARG1} and ${ARG2} where the values of the boundaries shall
+# be inserted.
+# Example: "I<double>(${ARG1}, ${ARG2})" and "I<float>(${ARG1}, ${ARG2})"
+#
+inf_sup_interval_double: n2i($ARG1, $ARG2)
+#inf_sup_interval_float:
+#inf_sup_interval_long_double:
+
+#
+# Decorated infsup interval for different data types.
+# Use the tokens ${ARG1}, ${ARG2} and ${DEC} for the boundaries and the
+# decoration of the interval respectively.
+#
+decorated_inf_sup_interval_double: '"[$ARG1, $ARG2]_$DEC"'
+#decorated_inf_sup_interval_float:
+#decorated_inf_sup_interval_long_double:
+
+#
+# Interval decorations
+#
+decorator_com: com
+decorator_def: def
+decorator_dac: dac
+decorator_ill: ill
+decorator_trv: trv
+
+#
+# The comparison operators <= and >= for two decorations.
+# Example: (${ARG1} <= ${ARG2})
+#          (${ARG1} >= ${ARG2})
+#
+decorator_less_equals: $ARG1 <= $ARG2
+decorator_greater_equals: $ARG1 >= $ARG2
+
+#
+# Overlap literals
+#
+overlap_bothEmpty: O::BothEmpty
+overlap_firstEmpty: O::FirstEmpty
+overlap_secondEmpty: O::SecondEmpty
+overlap_before: O::Before
+overlap_meets: O::Meets
+overlap_overlaps: O::Overlaps
+overlap_starts: O::Starts
+overlap_containedBy: O::ContainedBy
+overlap_finishes: O::Finishes
+overlap_equals: O::Equal
+overlap_finishedBy: O::FinishedBy
+overlap_contains: O::Contains
+overlap_startedBy: O::StartedBy
+overlap_overlappedBy: O::OverlappedBy
+overlap_metBy: O::MetBy
+overlap_after: O::After
+
+#
+# Signaled exceptions 
+#
+exception_UndefinedOperation:
+exception_PossiblyUndefinedOperation:
+exception_InvalidOperand:
+exception_IntvlPartOfNaI:
+exception_IntvlOverflow:
+
+# Check for no exception
+exception_no_exception:
+
+# Cleanup any previous signaled exceptions
+clear_exceptions:
+
+#
+# Translations of operations.
+# Arguments are consecutively numbered, i.e. ${ARG1}, ${ARG2}, ${ARG3}, ...
+# 
+# Note that since some functions in IEEE 1788 are optional, tests in an ITL file
+# which require an operation that is not present in a config file will merely
+# generate a warning and not abort the test generation.
+#
+# TODO: find a reasonable set of operations for this template
+#
+
+# Cancellative addition and subtraction
+#op_cancelMinus*:
+#op_cancelPlus*:
+
+# Set operations
+op_intersection*: $ARG1.intersection($ARG2)
+op_convexHull*: $ARG1.convex_hull($ARG2)
+
+# Constructors
+op_b-numsToInterval*: n2i($ARG1, $ARG2)
+#op_d-numsToInterval*:
+op_b-textToInterval*: t2i($ARG1)
+#op_d-textToInterval*:
+#op_setDec*:
+#op_newDec*:
+
+# Basic operations
+op_neg*: -$ARG1
+op_add*: $ARG1 + $ARG2
+op_sub*: $ARG1 - $ARG2
+op_mul*: $ARG1 * $ARG2
+op_div*: $ARG1 / $ARG2
+op_recip*: $ARG1.recip()
+op_sqr*: $ARG1.sqr()
+op_sqrt*: $ARG1.sqrt()
+op_fma*: $ARG1.mul_add($ARG2, $ARG3)
+
+# Power functions
+#op_pown*: $ARG1.pown($ARG2)
+#op_pow*: $ARG1.pow($ARG2)
+#op_exp*: $ARG1.exp()
+#op_exp2*: $ARG1.exp2()
+#op_exp10*: $ARG1.exp10()
+#op_log*: $ARG1.log()
+#op_log2*: $ARG1.log2()
+#op_log10*: $ARG1.log10()
+
+# Trigonometric/hyperbolic functions
+#op_sin*: $ARG1.sin()
+#op_cos*: $ARG1.cos()
+#op_tan*: $ARG1.tan()
+#op_asin*: $ARG1.asin()
+#op_acos*: $ARG1.acos()
+#op_atan*: $ARG1.atan()
+#op_atan2*: $ARG1.atan2($ARG2)
+#op_sinh*: $ARG1.sinh()
+#op_cosh*: $ARG1.cosh()
+#op_tanh*: $ARG1.tanh()
+#op_asinh*: $ARG1.asinh()
+#op_acosh*: $ARG1.acosh()
+#op_atanh*: $ARG1.atanh()
+
+# Integer functions
+op_sign*: $ARG1.sign()
+op_ceil*: $ARG1.ceil()
+op_floor*: $ARG1.floor()
+op_trunc*: $ARG1.trunc()
+op_roundTiesToEven*: $ARG1.round_ties_to_even()
+op_roundTiesToAway*: $ARG1.round_ties_to_away()
+
+# Absmax functions
+op_abs*: $ARG1.abs()
+op_min*: $ARG1.min($ARG2)
+op_max*: $ARG1.max($ARG2)
+
+# Numeric functions of intervals
+op_inf*: $ARG1.inf()
+op_sup*: $ARG1.sup()
+op_mid*: $ARG1.mid()
+op_wid*: $ARG1.wid()
+op_rad*: $ARG1.rad()
+op_mag*: $ARG1.mag()
+op_mig*: $ARG1.mig()
+#op_midRad*:
+
+# Boolean functions of intervals
+op_equal*: $ARG1 == $ARG2
+op_subset*: $ARG1.subset($ARG2)
+op_interior*: $ARG1.interior($ARG2)
+op_disjoint*: $ARG1.disjoint($ARG2)
+op_isEmpty*: $ARG1.is_empty()
+op_isEntire*: $ARG1.is_entire()
+#op_isNaI*:
+op_less*: $ARG1.less($ARG2)
+op_strictLess*: $ARG1.strict_less($ARG2)
+op_precedes*: $ARG1.precedes($ARG2)
+op_strictPrecedes*: $ARG1.strict_precedes($ARG2)
+op_isCommonInterval*: $ARG1.is_common_interval()
+op_isSingleton*: $ARG1.is_singleton()
+op_isMember*: I::is_member($ARG1, $ARG2)
+
+# Extended interval comparison
+op_overlap*: $ARG1.overlap($ARG2)
+
+# Reverse-mode elementary functions
+#op_absRev*:
+#op_absRevBin*: # binary version with two parameters
+#op_sqrRev*:
+#op_sqrRevBin*:
+#op_pownRev*:
+#op_pownRevBin*:
+#op_sinRev*:
+#op_sinRevBin*:
+#op_cosRev*:
+#op_cosRevBin*:
+#op_tanRev*:
+#op_tanRevBin*:
+#op_coshRev*:
+#op_coshRevBin*:
+#op_mulRev*:
+#op_mulRevTen*: # ternary version with three parameters
+#op_powRev1*:
+#op_powRev2*:
+#op_atan2Rev1*:
+#op_atan2Rev2*:
+
+# Two output division
+#op_mulRevToPair*:
+
+#op_intervalPart*:
+#op_decorationPart*:
+#op_setDec*:

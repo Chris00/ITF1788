@@ -1,0 +1,130 @@
+#
+#                              ITF1788
+#
+#   Interval Test Framework for IEEE 1788 Standard for Interval Arithmetic
+#
+#
+#   Copyright 2014
+#
+#   Marco Nehmeier (nehmeier@informatik.uni-wuerzburg.de)
+#   Maximilian Kiesner (maximilian.kiesner@stud-mail.uni-wuerzburg.de)
+#
+#   Department of Computer Science
+#   University of Wuerzburg, Germany
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
+#
+# The full name of the language.
+# Example: "C++"
+#
+name: Rust
+
+#
+# The file extension of the generated tests,
+# preceded by a dot.
+# Example: ".cpp"
+#
+extension: .rs
+
+#
+# Translation of the boolean values.
+# Example: "true" and "false"
+#
+boolean_true: "true"
+boolean_false: "false"
+
+#
+# Translation of different data types.
+# Example: "double", "float", "long double" and "NAN"
+#
+double_type: f64
+#float_type:
+#long_double_type:
+not_a_number_double: f64::NAN
+#not_a_number_float:
+#not_a_number_long_double:
+
+#
+# The prefix which initiates a single line comment.
+# Example: "//"
+#
+line_comment_token: "//"
+
+#
+# The prefix of a block comment.
+# Example: "/*"
+#
+block_comment_start: "/*"
+
+#
+# The prefix of the various lines in a block comment.
+# Example: "*"
+#
+block_comment_intermediate: " * "
+
+#
+# The suffix which ends a block comment.
+# Example: "*/"
+#
+block_comment_end: " */"
+
+#
+# The suffix of a statement, e.g. an assert statement.
+# Example: ";"
+#
+line_end_token: ;
+
+#
+# The boolean AND evaluated on two arguments.
+# Example: ${ARG1} && ${ARG2}
+#
+logical_and: ${ARG1} && ${ARG2}
+
+#
+# Imports specific to the language
+# Write the imports the way you would write them in a source file of the target
+# language.
+# Example: "#include <cmath>"
+#
+imports: |
+    #![rustfmt::skip]
+    #![allow(unused_attributes, unused_imports)]
+
+#
+# Tokens used for proper indentation.
+# The ITF supports three levels of indentation:
+#   - the basic level where imports are inserted
+#   - a second level where testcases start
+#   - a third level where assert statements are inserted
+#
+# The token "spaces_indent" specifies the number of whitespace
+# charakters a block shall be indented as a natural number.
+# The tokens "indent_testcases", "indent_tests", and "indent_asserts"
+# may be either "true" or "false", depending on whether or not these
+# blocks shall be indented or not.
+#
+spaces_indent: 4
+indent_testcases: false
+indent_tests: true
+indent_asserts: false
+
+#
+# Positive and negative infinity literals for different data types
+#
+infinity_plus_double: f64::INFINITY
+#infinity_plus_float:
+#infinity_plus_long_double:
+infinity_minus_double: f64::NEG_INFINITY
+#infinity_minus_float:
+#infinity_minus_long_double:
