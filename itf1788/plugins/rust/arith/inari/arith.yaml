@@ -43,6 +43,8 @@ imports: ""
 preamble: |
     use crate::util::*;
     use hexf::*;
+    type D = inari::Decoration;
+    type DI = inari::DecoratedInterval;
     type I = inari::Interval;
     type O = inari::OverlappingState;
 
@@ -50,9 +52,9 @@ preamble: |
 # NaI constant for different data types.
 # Example: "I<double>::nai()" and "I<float>::nai()"
 #
-nai_interval_double: 
-nai_interval_float:
-nai_interval_long_double:
+nai_interval_double: DI::nai()
+#nai_interval_float:
+#nai_interval_long_double:
 
 #
 # Empty interval for different data types.
@@ -74,7 +76,7 @@ entire_interval_double: I::entire()
 # inserted.
 # Example: "I<double>::empty($DEC)" and "I<float>::empty($DEC)"
 #
-decorated_empty_interval_double: '"[Empty]_$DEC"'
+decorated_empty_interval_double: DI::empty()
 #decorated_empty_interval_float:
 #decorated_empty_interval_long_double:
 
@@ -83,7 +85,7 @@ decorated_empty_interval_double: '"[Empty]_$DEC"'
 # Use the token ${DEC} where the translation of the decoration shall be
 # inserted.
 #
-decorated_entire_interval_double: '"[Entire]_$DEC"'
+decorated_entire_interval_double: nd2di(f64::NEG_INFINITY, f64::INFINITY, $DEC)
 #decorated_entire_interval_float:
 #decorated_entire_interval_long_double:
 
@@ -102,18 +104,18 @@ inf_sup_interval_double: n2i($ARG1, $ARG2)
 # Use the tokens ${ARG1}, ${ARG2} and ${DEC} for the boundaries and the
 # decoration of the interval respectively.
 #
-decorated_inf_sup_interval_double: '"[$ARG1, $ARG2]_$DEC"'
+decorated_inf_sup_interval_double: nd2di($ARG1, $ARG2, $DEC)
 #decorated_inf_sup_interval_float:
 #decorated_inf_sup_interval_long_double:
 
 #
 # Interval decorations
 #
-decorator_com: com
-decorator_def: def
-decorator_dac: dac
-decorator_ill: ill
-decorator_trv: trv
+decorator_com: D::Com
+decorator_def: D::Def
+decorator_dac: D::Dac
+decorator_ill: D::Ill
+decorator_trv: D::Trv
 
 #
 # The comparison operators <= and >= for two decorations.
@@ -179,11 +181,11 @@ op_convexHull*: $ARG1.convex_hull($ARG2)
 
 # Constructors
 op_b-numsToInterval*: n2i($ARG1, $ARG2)
-#op_d-numsToInterval*:
+op_d-numsToInterval*: n2di($ARG1, $ARG2)
 op_b-textToInterval*: t2i($ARG1)
-#op_d-textToInterval*:
-#op_setDec*:
-#op_newDec*:
+op_d-textToInterval*: t2di($ARG1)
+op_setDec*: DI::set_dec($ARG1, $ARG2)
+op_newDec*: DI::new($ARG1)
 
 # Basic operations
 op_neg*: -$ARG1
@@ -251,7 +253,7 @@ op_interior*: $ARG1.interior($ARG2)
 op_disjoint*: $ARG1.disjoint($ARG2)
 op_isEmpty*: $ARG1.is_empty()
 op_isEntire*: $ARG1.is_entire()
-#op_isNaI*:
+op_isNaI*: $ARG1.is_nai()
 op_less*: $ARG1.less($ARG2)
 op_strictLess*: $ARG1.strict_less($ARG2)
 op_precedes*: $ARG1.precedes($ARG2)
@@ -288,6 +290,5 @@ op_overlap*: $ARG1.overlap($ARG2)
 # Two output division
 #op_mulRevToPair*:
 
-#op_intervalPart*:
-#op_decorationPart*:
-#op_setDec*:
+op_intervalPart*: interval_part($ARG1)
+op_decorationPart*: $ARG1.decoration_part()
