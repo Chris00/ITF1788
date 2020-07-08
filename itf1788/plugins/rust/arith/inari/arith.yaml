@@ -260,7 +260,7 @@ op_precedes*: $ARG1.precedes($ARG2)
 op_strictPrecedes*: $ARG1.strict_precedes($ARG2)
 op_isCommonInterval*: $ARG1.is_common_interval()
 op_isSingleton*: $ARG1.is_singleton()
-op_isMember*: I::is_member($ARG1, $ARG2)
+op_isMember*: $ARG2.contains($ARG1)
 
 # Extended interval comparison
 op_overlap*: $ARG1.overlap($ARG2)
