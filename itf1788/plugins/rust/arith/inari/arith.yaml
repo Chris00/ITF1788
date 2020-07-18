@@ -201,12 +201,12 @@ op_fma*: $ARG1.mul_add($ARG2, $ARG3)
 # Power functions
 #op_pown*: $ARG1.pown($ARG2)
 #op_pow*: $ARG1.pow($ARG2)
-#op_exp*: $ARG1.exp()
-#op_exp2*: $ARG1.exp2()
-#op_exp10*: $ARG1.exp10()
-#op_log*: $ARG1.log()
-#op_log2*: $ARG1.log2()
-#op_log10*: $ARG1.log10()
+op_exp*: $ARG1.exp()
+op_exp2*: $ARG1.exp2()
+op_exp10*: $ARG1.exp10()
+op_log*: $ARG1.log()
+op_log2*: $ARG1.log2()
+op_log10*: $ARG1.log10()
 
 # Trigonometric/hyperbolic functions
 op_sin*: $ARG1.sin()
