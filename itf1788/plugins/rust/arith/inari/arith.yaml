@@ -52,21 +52,21 @@ preamble: |
 # NaI constant for different data types.
 # Example: "I<double>::nai()" and "I<float>::nai()"
 #
-nai_interval_double: DI::nai()
+nai_interval_double: DI::NAI
 #nai_interval_float:
 #nai_interval_long_double:
 
 #
 # Empty interval for different data types.
 #
-empty_interval_double: I::empty()
+empty_interval_double: I::EMPTY
 #empty_interval_float:
 #empty_interval_long_double:
 
 #
 # Entire interval for different data types.
 #
-entire_interval_double: I::entire()
+entire_interval_double: I::ENTIRE
 #entire_interval_float:
 #entire_interval_long_double:
 
@@ -76,7 +76,7 @@ entire_interval_double: I::entire()
 # inserted.
 # Example: "I<double>::empty($DEC)" and "I<float>::empty($DEC)"
 #
-decorated_empty_interval_double: DI::empty()
+decorated_empty_interval_double: DI::EMPTY
 #decorated_empty_interval_float:
 #decorated_empty_interval_long_double:
 
