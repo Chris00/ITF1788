@@ -41,7 +41,7 @@ imports: ""
 #           const double INF = std::numeric_limits<double>::infinity();
 #          "
 preamble: |
-    use crate::util::*;
+    use crate::{*, util::*};
     use hexf::*;
     type D = inari::Decoration;
     type DI = inari::DecoratedInterval;

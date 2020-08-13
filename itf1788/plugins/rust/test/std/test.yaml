@@ -116,7 +116,7 @@ test_signal_seq: |
 # Use the tokens ${ARG1} and ${ARG2} for the arguments.
 # Example: "BOOST_CHECK_EQUAL(${ARG1}, ${ARG2})"
 #
-assert_equals: assert_eq!($ARG1, $ARG2)
+assert_equals: assert_eq2!($ARG1, $ARG2)
 
 #
 # Equality check of two values which, instead of aborting, merely genereates a
@@ -124,7 +124,7 @@ assert_equals: assert_eq!($ARG1, $ARG2)
 # Use the tokens ${ARG1} and ${ARG2} for the arguments.
 # Example: "BOOST_WARN_EQUAL(${ARG1}, ${ARG2})"
 #
-assert_equals_warning: assert_eq!($ARG1, $ARG2)
+assert_equals_warning: assert_eq2!($ARG1, $ARG2)
 
 #
 # Checks if a value is the boolean true.
