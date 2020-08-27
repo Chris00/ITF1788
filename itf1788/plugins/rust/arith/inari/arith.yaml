@@ -204,7 +204,7 @@ op_pow*: $ARG1.pow($ARG2)
 op_exp*: $ARG1.exp()
 op_exp2*: $ARG1.exp2()
 op_exp10*: $ARG1.exp10()
-op_log*: $ARG1.log()
+op_log*: $ARG1.ln()
 op_log2*: $ARG1.log2()
 op_log10*: $ARG1.log10()
 
