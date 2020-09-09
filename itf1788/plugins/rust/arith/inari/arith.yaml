@@ -34,14 +34,14 @@ imports: ""
 # Example: "
 #           template<typename T>
 #           using flavor = p1788::flavor::infsup::mpfr_flavor<T, p1788::flavor::infsup::subnormalize::yes>;
-#           
+#
 #           template<typename T>
 #           using I = p1788::infsup::interval<T, flavor>;
-#           
+#
 #           const double INF = std::numeric_limits<double>::infinity();
 #          "
 preamble: |
-    use crate::{*, util::*};
+    use crate::*;
     use hexf::*;
     type D = inari::Decoration;
     type DI = inari::DecoratedInterval;
@@ -146,7 +146,7 @@ overlap_metBy: O::MetBy
 overlap_after: O::After
 
 #
-# Signaled exceptions 
+# Signaled exceptions
 #
 exception_UndefinedOperation:
 exception_PossiblyUndefinedOperation:
@@ -163,7 +163,7 @@ clear_exceptions:
 #
 # Translations of operations.
 # Arguments are consecutively numbered, i.e. ${ARG1}, ${ARG2}, ${ARG3}, ...
-# 
+#
 # Note that since some functions in IEEE 1788 are optional, tests in an ITL file
 # which require an operation that is not present in a config file will merely
 # generate a warning and not abort the test generation.
