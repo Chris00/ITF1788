@@ -137,7 +137,7 @@ overlap_overlaps: O::Overlaps
 overlap_starts: O::Starts
 overlap_containedBy: O::ContainedBy
 overlap_finishes: O::Finishes
-overlap_equals: O::Equal
+overlap_equals: O::Equals
 overlap_finishedBy: O::FinishedBy
 overlap_contains: O::Contains
 overlap_startedBy: O::StartedBy
