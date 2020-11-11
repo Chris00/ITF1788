@@ -42,20 +42,20 @@ imports: |
 # Use the token ${TESTCASES} where the testcases shall be inserted.
 # Example: "
 #           ${COMMENTS}
-#           ${LANGUAGE_IMPORTS}    
+#           ${LANGUAGE_IMPORTS}
 #           ${TESTLIB_IMPORTS}
 #           ${ARITHLIB_IMPORTS}
-#           ${PREAMBLE}  
+#           ${PREAMBLE}
 #           ${TESTCASES}
 #          "
 #
 testfile_seq: |
-    $COMMENTS
-    $LANGUAGE_IMPORTS
-    $TESTLIB_IMPORTS
-    $ARITHLIB_IMPORTS
-    $PREAMBLE
-    $TESTCASES
+  $COMMENTS
+  $LANGUAGE_IMPORTS
+  $TESTLIB_IMPORTS
+  $ARITHLIB_IMPORTS
+  $PREAMBLE
+  $TESTCASES
 
 #
 # Define the structure of a test case.
@@ -72,11 +72,11 @@ testfile_seq: |
 #          "
 #
 testcase_seq: |
-    $COMMENTS
-    #[test]
-    fn $TC_NAME() {
-    ${TESTS}
-    }
+  $COMMENTS
+  #[test]
+  fn $TC_NAME() {
+  ${TESTS}
+  }
 
 #
 # Define the structure of a test with no signaled exception.
@@ -89,9 +89,8 @@ testcase_seq: |
 #          "
 #
 test_seq: |
-    $COMMENTS
-    $ASSERTS
-
+  $COMMENTS
+  $ASSERTS
 
 #
 # Define the structure of a test with subsequent checking whether an exception
@@ -108,8 +107,8 @@ test_seq: |
 #          "
 #
 test_signal_seq: |
-    $COMMENTS
-    $ASSERTS
+  $COMMENTS
+  $ASSERTS
 
 #
 # Equality check of two values.

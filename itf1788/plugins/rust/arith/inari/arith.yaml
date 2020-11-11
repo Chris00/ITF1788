@@ -41,12 +41,12 @@ imports: ""
 #           const double INF = std::numeric_limits<double>::infinity();
 #          "
 preamble: |
-    use crate::*;
-    use hexf::*;
-    type D = inari::Decoration;
-    type DI = inari::DecoratedInterval;
-    type I = inari::Interval;
-    type O = inari::OverlappingState;
+  use crate::*;
+  use hexf::*;
+  type D = inari::Decoration;
+  type DI = inari::DecInterval;
+  type I = inari::Interval;
+  type O = inari::OverlappingState;
 
 #
 # NaI constant for different data types.
