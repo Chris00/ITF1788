@@ -34,7 +34,7 @@ import re
 
 
 def cb_int(val):
-    return str(float(val))
+    return repr(float(val))
 
 #
 # Input: the string of a floating point number as defined in the ITL file
@@ -44,9 +44,9 @@ def cb_int(val):
 
 def cb_fpNum(val):
     if 'p' in val.lower():
-        return 'hexf64!("{}")'.format(float.fromhex(val).hex())
+        return repr(float.fromhex(val))
     else:
-        return str(float(val))
+        return repr(float(val))
 
 #
 # Input: a string as defined in the ITL file

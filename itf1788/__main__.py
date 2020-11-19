@@ -41,166 +41,163 @@ import textwrap
 # this allows properly formatted multiline strings in help messages
 class ConsoleParser(optparse.OptionParser):
 
-        '''Handles the arguments passed to the program.'''
-                
-        def __init__(self):
-            '''
-            Define the valid options.
-            '''
-            super(ConsoleParser, self).__init__()
-            self.add_option("-s", "--sourceDirectory", dest="sourceDir",
-                     # TODO: check for operating systems other than linux
-                     default='itl',
-                     help="Directory with DSL tests")
+    '''Handles the arguments passed to the program.'''
 
-            self.add_option("-f", "--fileRegex", dest="fileRegex",
-                            default='.*',
-                            help="Regex for names of the desired DSL tests")
+    def __init__(self):
+        '''
+        Define the valid options.
+        '''
+        super(ConsoleParser, self).__init__()
+        self.add_option("-s", "--sourceDirectory", dest="sourceDir",
+                        # TODO: check for operating systems other than linux
+                        default='itl',
+                        help="Directory with DSL tests")
 
-            self.add_option("-c", "--configurations", dest="configurations",
-                            help="""Specify the plugin configurations.""")
+        self.add_option("-f", "--fileRegex", dest="fileRegex",
+                        default='.*',
+                        help="Regex for names of the desired DSL tests")
 
-            self.add_option("-o", "--outputDirectory", dest="outDir",
-                            default="output",
-                            help="Output directory for generated files")
-                            
-            self.add_option("-v", "--verbose", action="store_true",
-                            dest="verbose")
-        
-                     
-        def processConsoleParameters(self):
-            '''
-            Read the passed arguments and process them.
-            '''       
-            (options, args) = self.parse_args()
-            self._checkSrcDir(options)
-            self._checkFileRegex(options)
-            self.specList = self._buildSpecList(options)
-            self.testFiles = self._buildTestFileList(options)
-            self.outDir = options.outDir
-            self.verbose = options.verbose
-        
-        def _buildSpecList(self, options):
-            '''
-            Use the passed arguments and build a list of he configurations that
-            shall be generated.
-            '''
-            # if no specific configurations are given, generate tests for all
-            # configurations
-            if options.configurations is None or options.configurations == '*':
-                return discovery.getSpecList()
-            
-            
-            # regexes that are used to interpret the 'configurations'
-            # console parameter
-            identRegex = r"'[a-zA-Z](\s?[a-zA-Z0-9_.-])*'"
-            wildcardRegex = r"'\*'"
-            specListRegex = r"\s*\(\s*.+\s*,\s*.+\s*,\s*.+\s*\)\s*" + \
-                            r"(\s*;\s*\(\s*.+\s*,\s*.+\s*,\s*.+\s*\)\s*)*"
-            LTARegex = r"\s*\(\s*" + identRegex + r"\s*,\s*" + identRegex + \
-                       r"\s*,\s*" + identRegex + r"\s*\)\s*"
-            LTWRegex = r"\s*\(\s*" + identRegex + r"\s*,\s*" + identRegex + \
-                       r"\s*,\s*" + wildcardRegex + r"\s*\)\s*"
-            LWARegex = r"\s*\(\s*" + identRegex + r"\s*,\s*" + wildcardRegex + \
-                       r"\s*,\s*" + identRegex + r"\s*\)\s*"
-            LWWRegex = r"\s*\(\s*" + identRegex + r"\s*,\s*" + wildcardRegex + \
-                       r"\s*,\s*" + wildcardRegex + r"\s*\)\s*"
+        self.add_option("-c", "--configurations", dest="configurations",
+                        help="""Specify the plugin configurations.""")
 
-            if re.match(specListRegex, options.configurations):
-                # use configurations list parameter
-                tmp = options.configurations.split(';')
+        self.add_option("-o", "--outputDirectory", dest="outDir",
+                        default="output",
+                        help="Output directory for generated files")
 
-                # enclose tuple values in quotation marks, required for
-                # the makeTuple method
-                for i in range(0, len(tmp)):
-                    conf = tmp[i].strip()
-                    # remove parentheses and leading/trailing whitespace
-                    conf = conf[1:][:-1].strip()
-                    # get tuple values and remove leading/trailing whitespace
-                    vals = [v.strip() for v in conf.split(',')]
-                    # add quotation marks and concat again
-                    conf = '(' + ','.join(["'" + v + "'" for v in vals]) + ')'
-                    # replace original config
-                    tmp[i] = conf
+        self.add_option("-v", "--verbose", action="store_true",
+                        dest="verbose")
 
-                try:
-                    tmp = [makeTuple(el.strip()) for el in tmp]
-                    valid = True
-                except:
-                    valid = False
-                if not valid:
-                    raise IOError('Invalid specification list:' +\
-                                    options.configurations +\
-                                    '\nRun "python3 -m itf1788 --help" to see the\
-                                    correct syntax.')
+    def processConsoleParameters(self):
+        '''
+        Read the passed arguments and process them.
+        '''
+        (options, args) = self.parse_args()
+        self._checkSrcDir(options)
+        self._checkFileRegex(options)
+        self.specList = self._buildSpecList(options)
+        self.testFiles = self._buildTestFileList(options)
+        self.outDir = options.outDir
+        self.verbose = options.verbose
 
-                specList = []
+    def _buildSpecList(self, options):
+        '''
+        Use the passed arguments and build a list of he configurations that
+        shall be generated.
+        '''
+        # if no specific configurations are given, generate tests for all
+        # configurations
+        if options.configurations is None or options.configurations == '*':
+            return discovery.getSpecList()
 
-                for spec in tmp:
-                    if re.match(LTARegex, str(spec)):
-                        specList += [spec]
-                    elif re.match(LTWRegex, str(spec)):
-                        specList += \
-                         discovery.getSpecListByLanguageAndTestLibrary(spec[0],
-                                                                       spec[1])
-                    elif re.match(LWARegex, str(spec)):
-                        specList += \
-                         discovery.getSpecListByLanguageAndArithmeticLibrary(spec[0],
-                                                                             spec[2])
-                    elif re.match(LWWRegex, str(spec)):
-                        specList += discovery.getSpecListByLanguage(spec[0])
+        # regexes that are used to interpret the 'configurations'
+        # console parameter
+        identRegex = r"'[a-zA-Z](\s?[a-zA-Z0-9_.-])*'"
+        wildcardRegex = r"'\*'"
+        specListRegex = r"\s*\(\s*.+\s*,\s*.+\s*,\s*.+\s*\)\s*" + \
+                        r"(\s*;\s*\(\s*.+\s*,\s*.+\s*,\s*.+\s*\)\s*)*"
+        LTARegex = r"\s*\(\s*" + identRegex + r"\s*,\s*" + identRegex + \
+                   r"\s*,\s*" + identRegex + r"\s*\)\s*"
+        LTWRegex = r"\s*\(\s*" + identRegex + r"\s*,\s*" + identRegex + \
+                   r"\s*,\s*" + wildcardRegex + r"\s*\)\s*"
+        LWARegex = r"\s*\(\s*" + identRegex + r"\s*,\s*" + wildcardRegex + \
+                   r"\s*,\s*" + identRegex + r"\s*\)\s*"
+        LWWRegex = r"\s*\(\s*" + identRegex + r"\s*,\s*" + wildcardRegex + \
+                   r"\s*,\s*" + wildcardRegex + r"\s*\)\s*"
 
-            else:
-                raise IOError('Invalid configurations specification: ' +
-                              options.configurations)
-            return specList
-            
-        def _buildTestFileList(self, options):
-            '''
-            Assemble a list of all ITL tests corresponding to the passed
-            parameter
-            '''
-            testFiles = [os.path.join(options.sourceDir, f)
-                              for f in os.listdir(options.sourceDir)
-                              if os.path.isfile(os.path.join(options.sourceDir,
-                                                             f))
-                              if re.match(options.fileRegex, f)]
-            testFiles = list(filter(lambda f: f.endswith('.itl'), testFiles))
-            return testFiles
-            
-        def _checkSrcDir(self, options):
-            '''
-            Check if the path to the source directory is well formed
-            '''
-            if not os.path.isdir(options.sourceDir):
-                raise IOError('Invalid source directory: ' +\
-                                options.sourceDir)
-                
-        def _checkFileRegex(self, options):
-            '''
-            Check if the file regex is valid
-            '''
+        if re.match(specListRegex, options.configurations):
+            # use configurations list parameter
+            tmp = options.configurations.split(';')
+
+            # enclose tuple values in quotation marks, required for
+            # the makeTuple method
+            for i in range(0, len(tmp)):
+                conf = tmp[i].strip()
+                # remove parentheses and leading/trailing whitespace
+                conf = conf[1:][:-1].strip()
+                # get tuple values and remove leading/trailing whitespace
+                vals = [v.strip() for v in conf.split(',')]
+                # add quotation marks and concat again
+                conf = '(' + ','.join(["'" + v + "'" for v in vals]) + ')'
+                # replace original config
+                tmp[i] = conf
+
             try:
-                re.compile(options.fileRegex)
+                tmp = [makeTuple(el.strip()) for el in tmp]
                 valid = True
             except:
                 valid = False
             if not valid:
-                raise IOError('Invalid file regex: ' + options.fileRegex)
-            
+                raise IOError('Invalid specification list:' +
+                              options.configurations +
+                              '\nRun "python3 -m itf1788 --help" to see the\
+                                    correct syntax.')
 
-        def format_epilog(self, formatter):
-            '''
-            Help message.
-            '''
-            return textwrap.dedent("""
+            specList = []
+
+            for spec in tmp:
+                if re.match(LTARegex, str(spec)):
+                    specList += [spec]
+                elif re.match(LTWRegex, str(spec)):
+                    specList += \
+                        discovery.getSpecListByLanguageAndTestLibrary(spec[0],
+                                                                      spec[1])
+                elif re.match(LWARegex, str(spec)):
+                    specList += \
+                        discovery.getSpecListByLanguageAndArithmeticLibrary(spec[0],
+                                                                            spec[2])
+                elif re.match(LWWRegex, str(spec)):
+                    specList += discovery.getSpecListByLanguage(spec[0])
+
+        else:
+            raise IOError('Invalid configurations specification: ' +
+                          options.configurations)
+        return specList
+
+    def _buildTestFileList(self, options):
+        '''
+        Assemble a list of all ITL tests corresponding to the passed
+        parameter
+        '''
+        testFiles = [os.path.join(options.sourceDir, f)
+                     for f in os.listdir(options.sourceDir)
+                     if os.path.isfile(os.path.join(options.sourceDir,
+                                                    f))
+                     if re.match(options.fileRegex, f)]
+        testFiles = list(filter(lambda f: f.endswith('.itl'), testFiles))
+        return testFiles
+
+    def _checkSrcDir(self, options):
+        '''
+        Check if the path to the source directory is well formed
+        '''
+        if not os.path.isdir(options.sourceDir):
+            raise IOError('Invalid source directory: ' +
+                          options.sourceDir)
+
+    def _checkFileRegex(self, options):
+        '''
+        Check if the file regex is valid
+        '''
+        try:
+            re.compile(options.fileRegex)
+            valid = True
+        except:
+            valid = False
+        if not valid:
+            raise IOError('Invalid file regex: ' + options.fileRegex)
+
+    def format_epilog(self, formatter):
+        '''
+        Help message.
+        '''
+        return textwrap.dedent("""
                     Examples:
                     -- print help
                     python3 -m itf1788 -h
-                    
+
                     -- run ITF1788 with default source and output folder
                     python3 -m itf1788
-                    
+
                     -- use verbose output
                     python3 -m itf1788 -v
 
@@ -234,10 +231,11 @@ class ConsoleParser(optparse.OptionParser):
                     python3 -m itf1788 -s "itl" -c "(cpp, *, *); (octave, *, *)"
                     """)
 
-def main():            
+
+def main():
     # measure run time
-    startTime = time.clock()
-    
+    startTime = time.process_time()
+
     # parse console parameters
     optParser = ConsoleParser()
     optParser.processConsoleParameters()
@@ -249,25 +247,25 @@ def main():
     for testfile in testFiles:
         # parse the current ITL file and build an abstract syntax tree
         ast = dslparser.parse(testfile)
-        
+
         # iterate over configurations
         for language, testlib, arithlib in specList:
             spec = discovery.getSpecification(language, testlib, arithlib)
             out = lang.OutputSpecification(spec[0], spec[1], spec[2])
             cbPath = discovery.getCbPath(language)
-            
+
             # paths to output directory and output file
             writeDir = '/'.join([outDir, language, testlib, arithlib])
             writeFile = '.'.join(ntpath.basename(testfile).split('.')[:-1]) + \
                         out.lang_extension
-            
+
             if optParser.verbose:
                 print('Generating', writeFile, 'for specification',
-                      str((language, testlib, arithlib)), '...')    
-            
+                      str((language, testlib, arithlib)), '...')
+
             # generate output content by visiting the AST
             v = testAST.ASTVisitor(out, cbPath)
-            (content, warnings) = ast.accept(v)           
+            (content, warnings) = ast.accept(v)
 
             # create output directory if it does not exist
             if not os.path.exists(writeDir):
@@ -279,12 +277,13 @@ def main():
                 for warn in warnings:
                     print(warn)
                 print('Done.\n')
-            
-    endTime = time.clock()
+
+    endTime = time.process_time()
     if optParser.verbose:
         print('-'*80)
         print('Generated output for', len(testFiles), 'testfiles in',
               "%.2f" % round(endTime - startTime, 2), 'seconds.')
+
 
 # Run main method if this script is called directly
 if __name__ == '__main__':
