@@ -289,5 +289,5 @@ op_overlap*: $ARG1.overlap($ARG2)
 # Two output division
 #op_mulRevToPair*:
 
-op_intervalPart*: interval_part($ARG1)
-op_decorationPart*: $ARG1.decoration_part()
+op_intervalPart*: $ARG1.interval().unwrap_or(I::EMPTY)
+op_decorationPart*: $ARG1.decoration()
