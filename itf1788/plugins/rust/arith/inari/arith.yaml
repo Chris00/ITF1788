@@ -42,10 +42,7 @@ imports: ""
 #          "
 preamble: |
   use crate::*;
-  type D = inari::Decoration;
-  type DI = inari::DecInterval;
-  type I = inari::Interval;
-  type O = inari::Overlap;
+  use inari::{DecInterval as DI, Decoration as D, Interval as I, Overlap as O};
 
 #
 # NaI constant for different data types.

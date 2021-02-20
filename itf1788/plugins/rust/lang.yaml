@@ -98,8 +98,7 @@ logical_and: ${ARG1} && ${ARG2}
 # Example: "#include <cmath>"
 #
 imports: |
-    #![rustfmt::skip]
-    #![allow(unused_attributes, unused_imports)]
+  #![rustfmt::skip]
 
 #
 # Tokens used for proper indentation.
