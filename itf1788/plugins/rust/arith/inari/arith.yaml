@@ -168,8 +168,8 @@ clear_exceptions:
 #
 
 # Cancellative addition and subtraction
-#op_cancelMinus*:
-#op_cancelPlus*:
+op_cancelMinus*: $ARG1.cancel_minus($ARG2)
+op_cancelPlus*: $ARG1.cancel_plus($ARG2)
 
 # Set operations
 op_intersection*: $ARG1.intersection($ARG2)
